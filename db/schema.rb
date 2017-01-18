@@ -10,10 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170117160742) do
+ActiveRecord::Schema.define(version: 20170118151352) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "categories", force: :cascade do |t|
+    t.string   "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "jobs", force: :cascade do |t|
     t.string   "title"
@@ -21,6 +27,20 @@ ActiveRecord::Schema.define(version: 20170117160742) do
     t.boolean  "permanent"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.string   "category"
+  end
+
+  create_table "jobs_and_keywords", id: false, force: :cascade do |t|
+    t.integer "job_id"
+    t.integer "keyword_id"
+    t.index ["job_id"], name: "index_jobs_and_keywords_on_job_id", using: :btree
+    t.index ["keyword_id"], name: "index_jobs_and_keywords_on_keyword_id", using: :btree
+  end
+
+  create_table "keywords", force: :cascade do |t|
+    t.string   "word"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
