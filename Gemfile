@@ -32,6 +32,7 @@ group :development, :test do
   gem 'pg'
   gem "rack-test"
   gem 'rails-controller-testing'
+  gem 'simplecov'
 end
 
 group :development do
