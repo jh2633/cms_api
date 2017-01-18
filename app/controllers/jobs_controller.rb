@@ -5,11 +5,8 @@ class JobsController < ApplicationController
   # GET /jobs
   # read all
   def index
-    if params[:status] == "activated"
-      @jobs = Job.activated
-    else
-      @jobs = Job.deactivated
-    end
+    @jobs = Job.all
+
     render json: @jobs
   end
 
