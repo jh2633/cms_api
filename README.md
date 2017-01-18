@@ -25,20 +25,32 @@ Complete source code, including migrations
 README describing your solution, and how to configure and run it Automated tests, using RSpec
 What we'll be keen to see
 Clear and readable code Appropriate test coverage Following Rails best practices
+# Feature Checklist
 
-Classes
+* Models
 
-Job
--title
--description
--permanent?
--has one category
--has many keywords
+  1. Job
+    * title
+    1. description
+    1. permanent?
+    1. belongs to one Category
+    1. has many keywords
+    1. activated/deactivated
 
-Category
--Title
--has many jobs
+  1. Category
+    * Title
+    1. has many Jobs
 
-
-Keyword
--has many jobs
+  1. Keyword
+    * has many Jobs
+* Endpoints
+  1. Job
+    * read(all or one)
+    * create
+    * update
+    * activate/deactivate
+    * can NOT delete job entries
+    * API Token along with request
+  1. Application for job
+    * Accept application with a JSON format that contains name, email, cover letter, and CV.
+    * If job is not active the application will be rejected (with error message)
