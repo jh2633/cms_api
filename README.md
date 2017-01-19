@@ -22,9 +22,12 @@ If the job is active, it should send the application via a mail API (for example
 Note: Fully implementing the mail API library is outside the scope of the assignment! Please simply use an empty class, and mock this class in your tests to show requests are correctly sent (or not sent, if the job is not active).
 Deliverable
 Complete source code, including migrations
-README describing your solution, and how to configure and run it Automated tests, using RSpec
+README describing your solution, and how to configure and run it 
+Automated tests, using RSpec
 What we'll be keen to see
-Clear and readable code Appropriate test coverage Following Rails best practices
+Clear and readable code
+Appropriate test coverage
+Following Rails best practices
 # Feature Checklist
 
 * Models

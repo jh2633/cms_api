@@ -1,5 +1,5 @@
 class JobsController < ApplicationController
-  before_action :set_job, only: [:show, :update, :destroy]
+  before_action :set_job, only: [:show, :update]
 #features: read all, read one, create, update, deactivate, activate
 
   # GET /jobs
@@ -21,7 +21,6 @@ class JobsController < ApplicationController
   #create
   def create
     @job = Job.new(job_params)
-
     if @job.save
       render json: @job, status: :created, location: @job
     else
@@ -47,6 +46,6 @@ class JobsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def job_params
-      params.require(:job).permit(:title, :description, :permanent)
+      params.require(:job).permit(:title, :description, :permanent, :category)
     end
 end

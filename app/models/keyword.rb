@@ -1,3 +1,4 @@
 class Keyword < ApplicationRecord
-  has_and_belongs_to_many :jobs
+  has_many :jobs_and_keywords
+  has_many :jobs, through: :jobs_and_keywords
 end

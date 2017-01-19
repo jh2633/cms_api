@@ -1,4 +1,5 @@
 class Job < ApplicationRecord
-  belongs_to :category
-  has_and_belongs_to_many :keywords
+  belongs_to :category, optional: true
+  has_many :jobs_and_keywords
+  has_many :keywords, through: :jobs_and_keywords
 end
