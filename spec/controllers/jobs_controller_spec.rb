@@ -7,10 +7,10 @@ RSpec.describe JobsController, type: :controller do
   # Job. As you add validations to Job, be sure to
   # adjust the attributes here as well.
 
-category = Category.create! {{title: 'Engineer'}}
+  Category.create! {{title: "engineer"}}
   let(:valid_attributes) {
     {title: 'junior dev', description: 'we need someone to create a CMS for our job system',
-  permanent: true, category: category}
+  permanent: true, category_id: Category.find(1)}
   }
 
   let(:invalid_attributes) {

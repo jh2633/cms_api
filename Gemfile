@@ -33,6 +33,7 @@ group :development, :test do
   gem "rack-test"
   gem 'rails-controller-testing'
   gem 'simplecov'
+  gem 'rb-readline'
 end
 
 group :development do
