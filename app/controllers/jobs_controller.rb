@@ -1,5 +1,5 @@
 class JobsController < ApplicationController
-  before_action :set_job, only: [:show, :update]
+  before_action :set_job, only: [:show, :update, :submission]
 #features: read all, read one, create, update, deactivate, activate
 
   # GET /jobs
@@ -28,6 +28,14 @@ class JobsController < ApplicationController
     end
   end
 
+  def submission
+    if @job.active?
+
+    else
+
+    end
+  end
+
   # PATCH/PUT /jobs/1
   #update
   def update
@@ -47,5 +55,8 @@ class JobsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def job_params
       params.require(:job).permit(:title, :description, :permanent, :category)
+    end
+
+    def submission_params
     end
 end
