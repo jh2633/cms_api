@@ -1,4 +1,5 @@
 class JobsController < ApplicationController
+  include CategoryHelper
   before_action :set_job, only: [:show, :update, :submission]
 #features: read all, read one, create, update, deactivate, activate
 
@@ -20,7 +21,9 @@ class JobsController < ApplicationController
   # POST /jobs
   #create
   def create
-    @job = Job.new(job_params)
+    @category = check_category(params[:category])
+    @job = Job.new(title: params[:title], description: params[:description],
+    permanent: params[:permanent], category: @category)
     if @job.save
       render json: @job, status: :created, location: @job
     else
@@ -39,8 +42,10 @@ class JobsController < ApplicationController
   # PATCH/PUT /jobs/1
   #update
   def update
-    if @job.update(job_params)
-      render json: @job
+    @category = check_category(params[:category])
+    if @job.update(title: params[:title], description: params[:description],
+      permanent: params[:permanent], category: @category)
+      render json: @job, status: :accepted
     else
       render json: @job.errors, status: :unprocessable_entity
     end
@@ -54,7 +59,11 @@ class JobsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def job_params
-      params.require(:job).permit(:title, :description, :permanent, :category)
+      params.require(:job).permit(:title, :description, :permanent, :category_id)
+    end
+
+    def category_params
+      params.require(:category).permit(:title)
     end
 
     def submission_params

@@ -15,9 +15,6 @@ RSpec.describe JobsController, type: :routing do
       expect(:get => "/jobs/1").to route_to("jobs#show", :id => "1")
     end
 
-    it "routes to #edit" do
-      expect(:get => "/jobs/1/edit").to route_to("jobs#edit", :id => "1")
-    end
 
     it "routes to #create" do
       expect(:post => "/jobs").to route_to("jobs#create")

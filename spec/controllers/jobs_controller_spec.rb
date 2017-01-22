@@ -7,15 +7,15 @@ RSpec.describe JobsController, type: :controller do
   # Job. As you add validations to Job, be sure to
   # adjust the attributes here as well.
 
-  Category.create! {{title: "engineer"}}
+  Category.create!(title: "engineer")
   let(:valid_attributes) {
     {title: 'junior dev', description: 'we need someone to create a CMS for our job system',
-  permanent: true, category_id: Category.find(1)}
+  permanent: true, category_id: Category.find_by(title: 'engineer')}
   }
 
   let(:invalid_attributes) {
-    {title: true, description: '123',
-    permanent: 'hello'}  }
+    {title: 'true', description: '123',
+    permanent: false, category_id: 1}  }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
@@ -38,14 +38,6 @@ RSpec.describe JobsController, type: :controller do
     end
   end
 
-  describe "GET #edit" do
-    it "assigns the requested job as @job" do
-      job = Job.create! valid_attributes
-      get :edit, params: {id: job.to_param}, session: valid_session
-      expect(assigns(:job)).to eq(job)
-    end
-  end
-
   describe "POST #create" do
     context "with valid params" do
       it "creates a new Job" do
@@ -62,7 +54,7 @@ RSpec.describe JobsController, type: :controller do
 
       it "redirects to the created job" do
         post :create, params: {job: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(Job.last)
+        expect(response).to have_http_status(201)
       end
     end
 
@@ -82,14 +74,16 @@ RSpec.describe JobsController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+        {title: 'senior dev', description: 'top secret project',
+      permanent: true, category_id: Category.find_by(title: 'engineer')}
+          }
 
       it "updates the requested job" do
         job = Job.create! valid_attributes
+        expect(Job.exists?(title: 'senior dev')).to be false
         put :update, params: {id: job.to_param, job: new_attributes}, session: valid_session
         job.reload
-        skip("Add assertions for updated state")
+        expect(job.attributes).to include( { "title" => "senior dev" } )
       end
 
       it "assigns the requested job as @job" do
@@ -98,10 +92,10 @@ RSpec.describe JobsController, type: :controller do
         expect(assigns(:job)).to eq(job)
       end
 
-      it "redirects to the job" do
+      it "gives status 202 accepted when updated successfully" do
         job = Job.create! valid_attributes
         put :update, params: {id: job.to_param, job: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(job)
+        expect(response).to have_http_status(202)
       end
     end
 
@@ -112,11 +106,6 @@ RSpec.describe JobsController, type: :controller do
         expect(assigns(:job)).to eq(job)
       end
 
-      it "re-renders the 'edit' template" do
-        job = Job.create! valid_attributes
-        put :update, params: {id: job.to_param, job: invalid_attributes}, session: valid_session
-        expect(response).to render_template("edit")
-      end
     end
   end
 
