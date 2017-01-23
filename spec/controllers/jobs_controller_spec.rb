@@ -10,16 +10,24 @@ RSpec.describe JobsController, type: :controller do
   Category.create!(title: "engineer")
   let(:valid_attributes) {
     {title: 'junior dev', description: 'we need someone to create a CMS for our job system',
-  permanent: true, category_id: Category.find_by(title: 'engineer')}
+  permanent: true, category_id: Category.find_by(title: 'engineer'), active: true}
   }
 
   let(:invalid_attributes) {
     {title: 'true', description: '123',
     permanent: false, category_id: 1}  }
 
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # JobsController. Be sure to keep this updated too.
+  let(:inactive_job) {
+    {title: 'junior dev', description: 'we need someone to create a CMS for our job system',
+  permanent: true, category_id: Category.find_by(title: 'engineer'), active: false}
+  }
+
+  let(:valid_app) {
+    {name: 'joseph huang', email: 'joseph@dontcrawlmyemail.com',
+    cover: 'im an awesome candidate!', cv: 'awesome cv'}
+    }
+
+
   let(:valid_session) { {} }
 
   describe "GET #index" do
@@ -75,8 +83,15 @@ RSpec.describe JobsController, type: :controller do
     context "applicant submit an application to an active job" do
       it "creates and stores a new application" do
         expect {
-          post :create, params: {application: valid_attributes}, session: valid_session
+          post :submission, params: {id: job.to_param, application: valid_app}, session: valid_session
         }.to change(Application, :count).by(1)
+      end
+    end
+    context "applicant submit an application to an inactive job" do
+      it "does not create and store a new application" do
+        expect {
+          post :submission, params: {id: inactive_job, application: valid_app}, session: valid_session
+        }.to change(Application, :count).by(0)
       end
     end
   end
