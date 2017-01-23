@@ -31,11 +31,12 @@ class JobsController < ApplicationController::API
     end
   end
 
+  #POST /jobs/:id job application submission via API
   def submission
     if @job.active?
-
+      @application = Application.new(application_params)
     else
-
+      render json: @job.errors, status: :unprocessable_entity
     end
   end
 
@@ -57,6 +58,9 @@ class JobsController < ApplicationController::API
       @job = Job.find(params[:id])
     end
 
+    def application_params
+      params.require(:application).permit(:name, :email, :cover, :cv)
+    end
     # Only allow a trusted parameter "white list" through.
     def job_params
       params.require(:job).permit(:title, :description, :permanent, :category_id)

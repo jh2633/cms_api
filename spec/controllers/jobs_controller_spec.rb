@@ -71,6 +71,16 @@ RSpec.describe JobsController, type: :controller do
     end
   end
 
+  describe "POST #submission" do
+    context "applicant submit an application to an active job" do
+      it "creates and stores a new application" do
+        expect {
+          post :create, params: {application: valid_attributes}, session: valid_session
+        }.to change(Application, :count).by(1)
+      end
+    end
+  end
+
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
