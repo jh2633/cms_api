@@ -1,4 +1,4 @@
-class JobsController < ApplicationController
+class JobsController < ApplicationController::API
   include CategoryHelper
   before_action :set_job, only: [:show, :update, :submission]
 #features: read all, read one, create, update, deactivate, activate
@@ -66,6 +66,5 @@ class JobsController < ApplicationController
       params.require(:category).permit(:title)
     end
 
-    def submission_params
-    end
+
 end

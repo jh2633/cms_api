@@ -75,7 +75,7 @@ RSpec.describe JobsController, type: :controller do
     context "with valid params" do
       let(:new_attributes) {
         {title: 'senior dev', description: 'top secret project',
-      permanent: true, category_id: Category.find_by(title: 'engineer')}
+      permanent: true, category: Category.find_by(title: 'engineer')}
           }
 
       it "updates the requested job" do
