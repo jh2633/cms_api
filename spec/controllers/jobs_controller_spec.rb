@@ -10,7 +10,7 @@ RSpec.describe JobsController, type: :controller do
   Category.create!(title: "engineer")
   let(:valid_attributes) {
     {title: 'junior dev', description: 'we need someone to create a CMS for our job system',
-  permanent: true, category_id: Category.find_by(title: 'engineer'), active: true}
+  permanent: true, category_id: Category.find_by(title: 'engineer'), status: true}
   }
 
   let(:invalid_attributes) {
@@ -19,7 +19,7 @@ RSpec.describe JobsController, type: :controller do
 
   let(:inactive_job) {
     {title: 'junior dev', description: 'we need someone to create a CMS for our job system',
-  permanent: true, category_id: Category.find_by(title: 'engineer'), active: false}
+  permanent: true, category_id: Category.find_by(title: 'engineer'), status: false}
   }
 
   let(:valid_app) {
@@ -71,17 +71,13 @@ RSpec.describe JobsController, type: :controller do
         post :create, params: {job: invalid_attributes}, session: valid_session
         expect(assigns(:job)).to be_a_new(Job)
       end
-
-      it "re-renders the 'new' template" do
-        post :create, params: {job: invalid_attributes}, session: valid_session
-        expect(response).to render_template("new")
-      end
     end
   end
 
   describe "POST #submission" do
     context "applicant submit an application to an active job" do
       it "creates and stores a new application" do
+        job = Job.create! valid_attributes
         expect {
           post :submission, params: {id: job.to_param, application: valid_app}, session: valid_session
         }.to change(Application, :count).by(1)
@@ -89,8 +85,9 @@ RSpec.describe JobsController, type: :controller do
     end
     context "applicant submit an application to an inactive job" do
       it "does not create and store a new application" do
+        inactive_job = Job.create! inactive_job
         expect {
-          post :submission, params: {id: inactive_job, application: valid_app}, session: valid_session
+          post :submission, params: {id: inactive_job.to_param, application: valid_app}, session: valid_session
         }.to change(Application, :count).by(0)
       end
     end

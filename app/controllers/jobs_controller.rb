@@ -1,4 +1,4 @@
-class JobsController < ApplicationController::API
+class JobsController < ApplicationController
   include CategoryHelper
   before_action :set_job, only: [:show, :update, :submission]
 #features: read all, read one, create, update, deactivate, activate
@@ -33,8 +33,13 @@ class JobsController < ApplicationController::API
 
   #POST /jobs/:id job application submission via API
   def submission
-    if @job.active?
+    if @job.status?
       @application = Application.new(application_params)
+      if @application.save
+        render json: @application, status: :created
+      else
+        render json: @application.errors, status: :unprocessable_entity
+      end
     else
       render json: @job.errors, status: :unprocessable_entity
     end
