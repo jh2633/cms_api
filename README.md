@@ -20,7 +20,7 @@
 1. Wait for updates to this repo!
 
 
-# Feature Checklist
+# Features Checklist
 
 * Models
 
@@ -47,7 +47,7 @@
   1. Job
     * read(all or one) ✅
     * create ✅
-    * update
+    * update ❌
     * activate/deactivate ✅
     * can NOT delete job entries ✅
     * API Token along with request ❌
