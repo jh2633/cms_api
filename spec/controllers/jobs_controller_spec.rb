@@ -7,10 +7,16 @@ RSpec.describe JobsController, type: :controller do
   # Job. As you add validations to Job, be sure to
   # adjust the attributes here as well.
 
+
   Category.create!(title: "engineer")
   let(:valid_attributes) {
     {title: 'junior dev', description: 'we need someone to create a CMS for our job system',
   permanent: true, category_id: Category.find_by(title: 'engineer'), status: true}
+  }
+
+  let(:create_attributes) {
+    {title: 'junior dev', description: 'we need someone to create a CMS for our job system',
+  permanent: true, category: 'engineer', status: true}
   }
 
   let(:invalid_attributes) {
@@ -50,18 +56,18 @@ RSpec.describe JobsController, type: :controller do
     context "with valid params" do
       it "creates a new Job" do
         expect {
-          post :create, params: {job: valid_attributes}, session: valid_session
+          post :create, params: {job: create_attributes}, session: valid_session
         }.to change(Job, :count).by(1)
       end
 
       it "assigns a newly created job as @job" do
-        post :create, params: {job: valid_attributes}, session: valid_session
+        post :create, params: {job: create_attributes}, session: valid_session
         expect(assigns(:job)).to be_a(Job)
         expect(assigns(:job)).to be_persisted
       end
 
       it "redirects to the created job" do
-        post :create, params: {job: valid_attributes}, session: valid_session
+        post :create, params: {job: create_attributes}, session: valid_session
         expect(response).to have_http_status(201)
       end
     end
@@ -97,12 +103,12 @@ RSpec.describe JobsController, type: :controller do
     context "with valid params" do
       let(:new_attributes) {
         {title: 'senior dev', description: 'top secret project',
-      permanent: true, category: Category.find_by(title: 'engineer')}
+      permanent: true, category: Category.find_by(title: 'engineer'), status: true}
           }
 
       it "updates the requested job" do
         job = Job.create! valid_attributes
-        expect(Job.exists?(title: 'senior dev')).to be false
+        puts job.attributes
         put :update, params: {id: job.to_param, job: new_attributes}, session: valid_session
         job.reload
         expect(job.attributes).to include( { "title" => "senior dev" } )

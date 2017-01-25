@@ -1,5 +1,6 @@
 class JobsController < ApplicationController
   include CategoryHelper
+  include ActionController::HttpAuthentication::Token::ControllerMethods
   before_action :set_job, only: [:show, :update, :submission]
 #features: read all, read one, create, update, deactivate, activate
 
@@ -49,8 +50,7 @@ class JobsController < ApplicationController
   #update
   def update
     @category = check_category(params[:category])
-    if @job.update(title: params[:title], description: params[:description],
-      permanent: params[:permanent], category: @category)
+    if @job.update(title: params[:title])
       render json: @job, status: :accepted
     else
       render json: @job.errors, status: :unprocessable_entity
@@ -71,9 +71,11 @@ class JobsController < ApplicationController
       params.require(:job).permit(:title, :description, :permanent, :category_id)
     end
 
-    def category_params
-      params.require(:category).permit(:title)
-    end
+    # def authenticate
+    #   authenticate_or_request_with_http_token do |token, options|
+    #       token == ENV["API_KEY"] ? self.auth_token = token :
+    #   end
+    # end
 
 
 end

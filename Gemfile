@@ -34,6 +34,7 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'simplecov'
   gem 'rb-readline'
+  gem 'dotenv-rails'
 end
 
 group :development do
