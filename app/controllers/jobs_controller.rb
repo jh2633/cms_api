@@ -50,9 +50,9 @@ class JobsController < ApplicationController
   # PATCH/PUT /jobs/1
   #update
   def update
-    @category = check_category(params[:category])
+    @category = check_category(params[:category_id])
     if @job.update(job_params)
-      @job.update(category_id: @category)
+      @job.update(category: @category)
       render json: @job, status: :accepted
     else
       render json: @job.errors, status: :unprocessable_entity

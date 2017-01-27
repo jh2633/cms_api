@@ -7,8 +7,10 @@ RSpec.describe JobsController, type: :controller do
   # Job. As you add validations to Job, be sure to
   # adjust the attributes here as well.
 
+  before(:each) do
+    @request.env["HTTP_AUTHORIZATION"] = "Token token=" + ENV["API_KEY"]
+  end
 
-  x=Category.create!(title: "engineer")
   let(:valid_attributes) {
     {title: 'junior dev', description: 'we need someone to create a CMS for our job system',
   permanent: true, category_id: Category.find_by(title: 'engineer'), status: true}
