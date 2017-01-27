@@ -1,6 +1,7 @@
 class JobsController < ApplicationController
   TOKEN = ENV['API_KEY']
   include CategoryHelper
+  include ErrorHelper
   include ActionController::HttpAuthentication::Token::ControllerMethods
   before_action :authenticate
   before_action :set_job, only: [:show, :update, :submission]
@@ -42,7 +43,7 @@ class JobsController < ApplicationController
         render json: @application.errors, status: :unprocessable_entity
       end
     else
-      render json: @job.errors, status: :unprocessable_entity
+      render plain: not_active, status: :unprocessable_entity
     end
   end
 

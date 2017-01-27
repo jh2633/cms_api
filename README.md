@@ -53,5 +53,5 @@
     * API Token along with request ✅
   1. Application for job
     * Accept application with a JSON format that contains name, email, cover letter, and CV. ✅
-    * If job is not active the application will be rejected (with error message) ❌
+    * If job is not active the application will be rejected (with error message) ✅
     * Mock class for emailing application if accepted ❌
