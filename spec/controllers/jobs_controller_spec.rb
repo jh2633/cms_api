@@ -8,7 +8,7 @@ RSpec.describe JobsController, type: :controller do
   # adjust the attributes here as well.
 
 
-  Category.create!(title: "engineer")
+  x=Category.create!(title: "engineer")
   let(:valid_attributes) {
     {title: 'junior dev', description: 'we need someone to create a CMS for our job system',
   permanent: true, category_id: Category.find_by(title: 'engineer'), status: true}
@@ -16,7 +16,7 @@ RSpec.describe JobsController, type: :controller do
 
   let(:create_attributes) {
     {title: 'junior dev', description: 'we need someone to create a CMS for our job system',
-  permanent: true, category: 'engineer', status: true}
+  permanent: true, category_id: 'engineer', status: true}
   }
 
   let(:invalid_attributes) {
@@ -72,12 +72,6 @@ RSpec.describe JobsController, type: :controller do
       end
     end
 
-    context "with invalid params" do
-      it "assigns a newly created but unsaved job as @job" do
-        post :create, params: {job: invalid_attributes}, session: valid_session
-        expect(assigns(:job)).to be_a_new(Job)
-      end
-    end
   end
 
   describe "POST #submission" do
@@ -103,12 +97,11 @@ RSpec.describe JobsController, type: :controller do
     context "with valid params" do
       let(:new_attributes) {
         {title: 'senior dev', description: 'top secret project',
-      permanent: true, category: Category.find_by(title: 'engineer'), status: true}
+      permanent: true, category: 'accounting', status: true}
           }
 
       it "updates the requested job" do
         job = Job.create! valid_attributes
-        puts job.attributes
         put :update, params: {id: job.to_param, job: new_attributes}, session: valid_session
         job.reload
         expect(job.attributes).to include( { "title" => "senior dev" } )

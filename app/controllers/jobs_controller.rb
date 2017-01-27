@@ -1,4 +1,5 @@
 class JobsController < ApplicationController
+  TOKEN = ENV["API_KEY"]
   include CategoryHelper
   include ActionController::HttpAuthentication::Token::ControllerMethods
   before_action :set_job, only: [:show, :update, :submission]
@@ -8,23 +9,21 @@ class JobsController < ApplicationController
   # read all
   def index
     @jobs = Job.all
-
     render json: @jobs
   end
 
   # GET /jobs/1
   #read one
   def show
-    #
     render json: @job
   end
 
   # POST /jobs
   #create
   def create
-    @category = check_category(params[:category])
-    @job = Job.new(title: params[:title], description: params[:description],
-    permanent: params[:permanent], category: @category)
+    @category = check_category(params[:category_id])
+    @job = Job.new(job_params)
+    @job.category = @category
     if @job.save
       render json: @job, status: :created, location: @job
     else
@@ -50,7 +49,8 @@ class JobsController < ApplicationController
   #update
   def update
     @category = check_category(params[:category])
-    if @job.update(title: params[:title])
+    if @job.update(job_params)
+      @job.update(category_id: @category)
       render json: @job, status: :accepted
     else
       render json: @job.errors, status: :unprocessable_entity
@@ -71,11 +71,15 @@ class JobsController < ApplicationController
       params.require(:job).permit(:title, :description, :permanent, :category_id)
     end
 
-    # def authenticate
-    #   authenticate_or_request_with_http_token do |token, options|
-    #       token == ENV["API_KEY"] ? self.auth_token = token :
-    #   end
-    # end
+
+    def authenticate
+      authenticate_or_request_with_http_token do |token, options|
+        ActiveSupport::SecurityUtils.secure_compare(
+          ::Digest::SHA256.hexdigest(token),
+          ::Digest::SHA256.hexdigest(TOKEN)
+        )
+      end
+    end
 
 
 end
