@@ -1,7 +1,8 @@
 class JobsController < ApplicationController
-  TOKEN = ENV["API_KEY"]
+  TOKEN = ENV['API_KEY']
   include CategoryHelper
   include ActionController::HttpAuthentication::Token::ControllerMethods
+  before_action :authenticate
   before_action :set_job, only: [:show, :update, :submission]
 #features: read all, read one, create, update, deactivate, activate
 
@@ -68,7 +69,7 @@ class JobsController < ApplicationController
     end
     # Only allow a trusted parameter "white list" through.
     def job_params
-      params.require(:job).permit(:title, :description, :permanent, :category_id)
+      params.require(:job).permit(:title, :description, :permanent, :category_id, :status)
     end
 
 

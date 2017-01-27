@@ -50,7 +50,7 @@
     * update ❌
     * activate/deactivate ✅
     * can NOT delete job entries ✅
-    * API Token along with request ❌
+    * API Token along with request ✅
   1. Application for job
     * Accept application with a JSON format that contains name, email, cover letter, and CV. ✅
     * If job is not active the application will be rejected (with error message) ❌
