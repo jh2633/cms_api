@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170123171345) do
+ActiveRecord::Schema.define(version: 20170127160857) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,13 +39,6 @@ ActiveRecord::Schema.define(version: 20170123171345) do
     t.integer  "category_id"
     t.boolean  "status"
     t.index ["category_id"], name: "index_jobs_on_category_id", using: :btree
-  end
-
-  create_table "jobs_and_keywords", id: false, force: :cascade do |t|
-    t.integer "job_id"
-    t.integer "keyword_id"
-    t.index ["job_id"], name: "index_jobs_and_keywords_on_job_id", using: :btree
-    t.index ["keyword_id"], name: "index_jobs_and_keywords_on_keyword_id", using: :btree
   end
 
   create_table "jobs_keywords", id: false, force: :cascade do |t|

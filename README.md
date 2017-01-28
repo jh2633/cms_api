@@ -41,17 +41,20 @@
     * has many Jobs ✅
 * Associations
     * Many jobs belong to one category✅
-    * A job has and belongs to many keywords (join table) ❌
+    * A job has and belongs to many keywords (join table) ✅
+
+* Testing
+    * High passing rate for RSpec tests❌
 
 * Endpoints
   1. Job
     * read(all or one) ✅
     * create ✅
-    * update ❌
+    * update ✅
     * activate/deactivate ✅
     * can NOT delete job entries ✅
     * API Token along with request ✅
   1. Application for job
     * Accept application with a JSON format that contains name, email, cover letter, and CV. ✅
     * If job is not active the application will be rejected (with error message) ✅
-    * Mock class for emailing application if accepted ❌
+    * Mock class for emailing applications if accepted ❌

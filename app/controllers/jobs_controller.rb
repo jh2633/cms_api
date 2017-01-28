@@ -1,10 +1,10 @@
 class JobsController < ApplicationController
   TOKEN = ENV['API_KEY']
-  include CategoryHelper
-  include ErrorHelper
+  include JobHelper
   include ActionController::HttpAuthentication::Token::ControllerMethods
   before_action :authenticate
   before_action :set_job, only: [:show, :update, :submission]
+  before_action :set_keywords, :set_category, only: [:create, :update]
 #features: read all, read one, create, update, deactivate, activate
 
   # GET /jobs
@@ -23,9 +23,9 @@ class JobsController < ApplicationController
   # POST /jobs
   #create
   def create
-    @category = check_category(params[:category_id])
     @job = Job.new(job_params)
     @job.category = @category
+    @job.keywords.concat @keywords
     if @job.save
       render json: @job, status: :created, location: @job
     else
@@ -48,9 +48,8 @@ class JobsController < ApplicationController
   end
 
   # PATCH/PUT /jobs/1
-  #update
+  #update/activate/deactivate jobs
   def update
-    @category = check_category(params[:category_id])
     if @job.update(job_params)
       @job.update(category: @category)
       render json: @job, status: :accepted
@@ -60,7 +59,6 @@ class JobsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_job
       @job = Job.find(params[:id])
     end
@@ -68,11 +66,21 @@ class JobsController < ApplicationController
     def application_params
       params.require(:application).permit(:name, :email, :cover, :cv)
     end
-    # Only allow a trusted parameter "white list" through.
+
     def job_params
-      params.require(:job).permit(:title, :description, :permanent, :category_id, :status)
+      params.require(:job).permit(:title, :description, :permanent, :category_id,
+      :status)
     end
 
+    def set_keywords
+      if params[:keywords] != nil
+      @keywords = check_keyword(params[:keywords])
+      end
+    end
+
+    def set_category
+      @category = check_category(params[:category_id])
+    end
 
     def authenticate
       authenticate_or_request_with_http_token do |token, options|
