@@ -1,14 +1,21 @@
-require './app/helper/job_helper'
+require './app/controllers/concerns/obj_creation'
 
 
-RSpec.describe JobHelper do
-  include JobHelper
+RSpec.describe ObjCreation do
+  include ObjCreation
   describe "keyword helper method" do
-    it "receives a string and puts out an array" do
+    it "receives a string and puts out an array object" do
       test_string = "for the test"
-      expect(check_keyword(test_string).each.word).to include({"word": "for"})
-
+      array = check_keyword(test_string)
+      expect(array.class).to eq(Array)
     end
+
+    it "creates keywords objects that respond to the method word" do
+      test_string = "for the test"
+      array = check_keyword(test_string)
+      expect(array[0].word).to eq("for")
+    end
+
   end
 
 

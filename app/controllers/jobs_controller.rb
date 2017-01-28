@@ -1,6 +1,8 @@
 class JobsController < ApplicationController
   TOKEN = ENV['API_KEY']
-  include JobHelper
+  require './lib/email_api.rb'
+  include ObjCreation
+  include ErrorMessages
   include ActionController::HttpAuthentication::Token::ControllerMethods
   before_action :authenticate
   before_action :set_job, only: [:show, :update, :submission]
@@ -37,13 +39,14 @@ class JobsController < ApplicationController
   def submission
     if @job.status?
       @application = Application.new(application_params)
-      if @application.save
-        render json: @application, status: :created
+      email_api = Email_api.new
+      if email_api.email(@application)
+        render json: @application, status: :OK
       else
-        render json: @application.errors, status: :unprocessable_entity
+        render json: @application.errors, status: :bad_request
       end
     else
-      render plain: not_active, status: :unprocessable_entity
+      render plain: job_not_active, status: :unprocessable_entity
     end
   end
 
@@ -52,6 +55,7 @@ class JobsController < ApplicationController
   def update
     if @job.update(job_params)
       @job.update(category: @category)
+      @job.update(keywords: @keywords)
       render json: @job, status: :accepted
     else
       render json: @job.errors, status: :unprocessable_entity
@@ -73,9 +77,7 @@ class JobsController < ApplicationController
     end
 
     def set_keywords
-      if params[:keywords] != nil
       @keywords = check_keyword(params[:keywords])
-      end
     end
 
     def set_category
